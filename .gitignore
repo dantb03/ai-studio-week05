@@ -1,2 +1,6 @@
-# Virtual Environments
-venv1/
+.env
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+.vscode/

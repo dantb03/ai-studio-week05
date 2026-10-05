@@ -16,12 +16,12 @@ legacy_report.py — 서강카페 월간 매출 리포트 생성 스크립트 (�
 
 import sqlite3
 from urllib.parse import urlparse
+import os
+from dotenv import load_dotenv
 
 # =====================================================================
 # 설정 — 레거시: 모든 값을 코드에 직접 적어 두었다
 # =====================================================================
-API_KEY = "sk-demo-week05-legacy-0000-NOT-A-REAL-KEY"
-# 예전 키 (혹시 몰라서 남겨둠): sk-demo-week05-old-1111-NOT-A-REAL-KEY
 DB_URL = "postgresql://report_admin:Sogang!2026@10.20.30.40:5432/sales_prod"
 MODEL = "claude-sonnet-4-5"
 REPORT_MONTH = "2026-09"
@@ -97,8 +97,17 @@ def print_report(month, summary, comment):
     print(f"\n  AI 코멘트: {comment}")
     print("=" * 46)
 
+def load_env():
+    load_dotenv()
+    api_key = os.getenv("API_KEY")
+    if api_key is None:
+        raise RuntimeError("API 키가 설정되지 않았습니다. .env 파일을 확인하세요.")
+    print("키 로드 성공 (앞 8자리):", api_key[:8] + "...")
+    return api_key
+
 
 def main():
+    API_KEY = load_env()
     conn = connect_db(DB_URL)
     summary = monthly_summary(conn, REPORT_MONTH)
     comment = request_llm_comment(summary, API_KEY)
