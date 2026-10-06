@@ -69,9 +69,9 @@ def monthly_summary(conn, month):
 # =====================================================================
 # 3) LLM 코멘트 요청 — 데모용: 실제 호출 없이 모의 응답을 돌려준다
 # =====================================================================
-def request_llm_comment(summary, api_key):
+def request_llm_comment(summary):
     headers = {
-        "x-api-key": api_key,
+        "x-api-key": "sk-demo-your-key-here",
         "anthropic-version": "2023-06-01",
         "content-type": "application/json",
     }
@@ -110,7 +110,7 @@ def main():
     API_KEY = load_env()
     conn = connect_db(DB_URL)
     summary = monthly_summary(conn, REPORT_MONTH)
-    comment = request_llm_comment(summary, API_KEY)
+    comment = request_llm_comment(summary)
     print_report(REPORT_MONTH, summary, comment)
     conn.close()
 
